@@ -1,4 +1,11 @@
-﻿body {
+﻿.index{
+    padding:10px;
+    background-color:#e95420;
+    width: 25%;
+    text-align: center;
+    border-radius: 20px;
+}
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
