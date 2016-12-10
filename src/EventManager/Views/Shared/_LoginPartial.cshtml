@@ -4,18 +4,38 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-@if (SignInManager.IsSignedIn(User))
+@if (SignInManager.IsSignedIn(User) && !string.IsNullOrEmpty(UserManager.Users.SingleOrDefault(u => u.UserName == User.Identity.Name).Name))
 {
     <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a asp-controller="Events" asp-action="ArtistIndex">My Events</a></li>
+                </ul>
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log off</button>
             </li>
         </ul>
     </form>
+}
+else if (SignInManager.IsSignedIn(User) && string.IsNullOrEmpty(UserManager.Users.SingleOrDefault(u => u.UserName == User.Identity.Name).Name))
+{
+<form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a asp-controller="Events" asp-action="ArtistRegister">My Events</a></li>
+                <li><a asp-controller="Events" asp-action="ArtistRegister">My Artists</a></li>
+            </ul>
+        </li>
+        <li>
+            <button type="submit" class="btn btn-link navbar-btn navbar-link">Log off</button>
+        </li>
+    </ul>
+</form>
 }
 else
 {

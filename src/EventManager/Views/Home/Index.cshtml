@@ -1,15 +1,18 @@
-﻿<h1 class="jumbotron"><span class="glyphicon glyphicon-search"></span>&nbsp; Event Manager</h1>
-<div>
-    <div class="index"><b>Artists</b></div>
-        <br />
-        <a asp-controller="Albums" class="btn btn-default btn-block"><b><big>My Albums</big></b></a>
-        <a asp-controller="Albums" class="btn btn-default btn-block"><b><big>My Albums</big></b></a>
-</div>
-<br />
-<div>
-    <div class="index"><b>Users</b></div>
-        <br />
-        <a asp-controller="Albums" class="btn btn-default btn-block"><b><big>My Albums</big></b></a>
-        <a asp-controller="Albums" class="btn btn-default btn-block"><b><big>My Albums</big></b></a>
-</div>
-
+﻿@model IEnumerable<EventManager.Models.Event>
+<h1 class="jumbotron"><span class="glyphicon glyphicon-search"></span>&nbsp; Event Manager</h1>
+<h2><big>All Upcoming Events</big></h2>
+@foreach (var show in Model)
+{
+    <h4><b>@show.Artist.Name</b></h4>
+    <div class="main">
+        <div class="left">
+            <div class="upperleft">@show.Venue</div>
+            <div class="list-filters"><b>@show.Genre.Name</b></div>
+        </div>
+        <div class="right">
+            <div><big><b>@show.Date.ToString("MMM").ToUpper()</b></big></div>
+            <div>@show.Date.ToString("dd")</div>
+        </div>
+    </div>
+    <br /><br />
+}

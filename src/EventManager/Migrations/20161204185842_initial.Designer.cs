@@ -5,16 +5,32 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using EventManager.Data;
 
-namespace EventManager.Data.Migrations
+namespace EventManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161204185842_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("EventManager.Data.Attendance", b =>
+                {
+                    b.Property<string>("Id");
+
+                    b.Property<int>("EventID");
+
+                    b.HasKey("Id", "EventID");
+
+                    b.HasIndex("EventID");
+
+                    b.HasIndex("Id");
+
+                    b.ToTable("Attendance");
+                });
 
             modelBuilder.Entity("EventManager.Models.ApplicationUser", b =>
                 {
@@ -72,19 +88,39 @@ namespace EventManager.Data.Migrations
                     b.Property<int>("EventID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ArtistId");
+
                     b.Property<DateTime>("Date");
 
-                    b.Property<string>("Genre");
+                    b.Property<int>("GenreID");
 
-                    b.Property<string>("Location");
+                    b.Property<bool>("IsCancelled");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Location")
+                        .IsRequired();
 
-                    b.Property<DateTime>("Time");
+                    b.Property<TimeSpan>("Time");
 
                     b.HasKey("EventID");
 
+                    b.HasIndex("ArtistId");
+
+                    b.HasIndex("GenreID");
+
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("EventManager.Models.Genre", b =>
+                {
+                    b.Property<int>("GenreID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("GenreID");
+
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -192,6 +228,31 @@ namespace EventManager.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("EventManager.Data.Attendance", b =>
+                {
+                    b.HasOne("EventManager.Models.Event", "Event")
+                        .WithMany("Users")
+                        .HasForeignKey("EventID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EventManager.Models.ApplicationUser", "User")
+                        .WithMany("Events")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EventManager.Models.Event", b =>
+                {
+                    b.HasOne("EventManager.Models.ApplicationUser", "Artist")
+                        .WithMany()
+                        .HasForeignKey("ArtistId");
+
+                    b.HasOne("EventManager.Models.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

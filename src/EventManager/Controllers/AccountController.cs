@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
 using EventManager.Models;
 using EventManager.Models.AccountViewModels;
-using EventManager.Services;
+using EventManager.Data;
 
 namespace EventManager.Controllers
 {
@@ -19,11 +16,12 @@ namespace EventManager.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        private readonly ApplicationDbContext db;
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            db = context;
         }
 
         [HttpGet]
@@ -42,10 +40,15 @@ namespace EventManager.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                var user = _userManager.Users.SingleOrDefault(u => u.UserName == model.Email);
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+                if (result.Succeeded && !string.IsNullOrEmpty(user.Name))
                 {
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Home");
+                }
+                if (result.Succeeded && string.IsNullOrEmpty(user.Name))
+                {
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -99,6 +102,11 @@ namespace EventManager.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                if (!db.Genres.Any(g => g.Name == model.Genre))
+                {
+                    db.Add(new Genre { Name = model.Genre });
+                    db.SaveChanges();
+                }
                 var user = new ApplicationUser { Name = model.Name, UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
