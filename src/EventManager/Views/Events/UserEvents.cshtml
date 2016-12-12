@@ -1,0 +1,26 @@
+﻿@model IEnumerable<EventManager.Models.Event>
+<h2>My Events</h2>
+<a asp-action="UserIndex" class="btn btn-danger">Back to List</a>
+<br />
+@foreach (var show in Model)
+{
+    <h4><b>@show.Artist.Name</b></h4>
+    <div class="main">
+        <div class="left">
+            <div class="upperleft">@show.Venue</div>
+            <div><b>@show.Genre.Name</b></div>
+        </div>
+        <div class="right">
+            <div><big><b>@show.Date.ToString("MMM").ToUpper()</b></big></div>
+            <div>@show.Date.ToString("dd")</div>
+        </div>
+    </div>
+    if (show.IsCancelled)
+    {
+        <div><b>Cancelled!</b></div>
+    }
+    else
+    {
+       <div><a class="btn btn-sm btn-danger" asp-action="Unattend" asp-route-id="@show.EventID">Unattend</a></div>
+    }
+}

@@ -16,7 +16,7 @@ namespace EventManager.Models
         [Required(ErrorMessage = "Time is required!")]
         [DataType(DataType.Time)]
         public TimeSpan Time { get; set; }
-        [Required(ErrorMessage = "Location is required!")]
+        [Required(ErrorMessage = "Venue name is required!")]
         public string Venue { get; set; }
         public Genre Genre { get; set; }
         public int GenreID { get; set; }

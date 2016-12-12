@@ -1,0 +1,38 @@
+﻿@model IEnumerable<EventManager.Models.Event>
+@inject UserManager<ApplicationUser> UserManager
+<h2>All Upcoming Events</h2>
+<form class="form-inline">
+    <div class="form-group">
+        <input type="search" name="search" />
+    </div>
+    <button type="submit" class="btn btn-info btn-sm">Search</button>
+    @if (!string.IsNullOrEmpty(ViewBag.Search))
+    {
+        <a asp-action="UserIndex" class="btn btn-sm btn-danger">All Events</a>
+    }
+</form>
+@foreach (var show in Model)
+{
+    <h4><b>@show.Artist.Name</b></h4>
+    <div class="main">
+        <div class="left">
+            <div class="upperleft">@show.Venue</div>
+            <div><b>@show.Genre.Name</b></div>
+        </div>
+        <div class="right">
+            <div><big><b>@show.Date.ToString("MMM").ToUpper()</b></big></div>
+            <div>@show.Date.ToString("dd")</div>
+        </div>
+    </div>
+    <br />
+        if (show.Users.Any(u => u.UserID == UserManager.Users.SingleOrDefault(n => n.UserName == User.Identity.Name).Id))
+        {
+            <a class="btn btn-sm btn-success" asp-action="Unattend" asp-route-id="@show.EventID">Attending</a>
+        }
+        else
+        {
+            <a class="btn btn-sm btn-default" asp-action="Reserve" asp-route-id="@show.EventID">Reserve Seat</a>
+    }
+    <a class="btn btn-sm btn-primary" asp-action="Details" asp-route-id="@show.EventID">Details</a>
+    <br /><br />
+}

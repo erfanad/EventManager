@@ -10,7 +10,7 @@ namespace EventManager.Data
 {
     public class Attendance                         
     {
-        public string Id { get; set; }
+        public string UserID { get; set; }
         public ApplicationUser User { get; set; }
         public int EventID { get; set; }
         public Event Event { get; set; }
@@ -29,12 +29,12 @@ namespace EventManager.Data
         {
             base.OnModelCreating(builder);
             builder.Entity<Attendance>()
-               .HasKey(p => new { p.Id, p.EventID });
+               .HasKey(p => new { p.UserID, p.EventID });
 
             builder.Entity<Attendance>()
                 .HasOne(p => p.User)
                 .WithMany(p => p.Events)
-                .HasForeignKey(p => p.Id);
+                .HasForeignKey(p => p.UserID);
 
             builder.Entity<Attendance>()
                 .HasOne(p => p.Event)

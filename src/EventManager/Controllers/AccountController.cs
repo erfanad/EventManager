@@ -48,7 +48,7 @@ namespace EventManager.Controllers
                 }
                 if (result.Succeeded && string.IsNullOrEmpty(user.Name))
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("UserIndex", "Events");
                 }
                 else
                 {

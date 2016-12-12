@@ -15,14 +15,20 @@ namespace EventManager.Controllers
         {
             db = context;
         }
-        public IActionResult Index()
+        public IActionResult Index(string search)
         {
-            return View(db.Events.Include(e => e.Genre).Include(e => e.Artist).Where(e => e.Date > DateTime.Now).ToList());
+            var events = db.Events.Include(e => e.Genre).Include(e => e.Artist).Include(e => e.Users).Where(e => e.Date > DateTime.Now).ToList();
+            ViewBag.Attendance = db.Attendance.Include(e => e.Event).Where(e => e.User.UserName == User.Identity.Name).ToList();
+            if (!string.IsNullOrEmpty(search))
+            {
+                ViewBag.Search = search;
+                events = db.Events.Where(e => e.Artist.Name.Contains(search) || e.Venue.Contains(search) || e.Genre.Name.Contains(search)).ToList();
+            }
+            return View(events);
         }
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 

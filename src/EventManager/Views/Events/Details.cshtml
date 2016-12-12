@@ -1,0 +1,24 @@
+﻿@model EventManager.Models.Event
+@{ViewData["Title"] = "Details"; }
+<h2>Event Details</h2>
+<div class="row">
+    <label class="col-md-2">Venue:</label>
+    <div class="col-md-10">@Model.Venue</div>
+</div>
+<div class="row">
+    <label class="col-md-2">Artist:</label>
+    <div class="col-md-10">@Model.Artist.Name</div>
+</div>
+<div class="row">
+    <label class="col-md-2">Date:</label>
+    <div class="col-md-10">@Model.Date.ToString("MMM, dd yyyy").ToUpper()</div>
+</div>
+<div class="row">
+    <label class="col-md-2">Time:</label>
+    <div class="col-md-2">@DateTime.Today.Add(Model.Time).ToString("hh:mm tt")</div>
+</div>
+<div class="row">
+    <label class="col-md-2">Genre:</label>
+    <div class="col-md-2">@Model.Genre.Name</div>
+</div>
+<a asp-action="UserIndex" class="btn btn-primary">Back to Events</a>

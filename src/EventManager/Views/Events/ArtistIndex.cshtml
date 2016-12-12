@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<EventManager.Models.Event>
-
 <h2><b>@ViewBag.Artist.Name</b></h2>
 <br />
 <div>
@@ -14,15 +13,15 @@
     <div class="main">
         <div class="left">
             <div class="upperleft">@show.Venue</div>
-            <div class="list-filters"><b>@show.Genre.Name</b></div>
+            <div><b>@show.Genre.Name</b></div>
         </div>
         <div class="right">
-            <div><big><b>@show.Date.ToString("MMM")</b></big></div>
+            <div><big><b>@show.Date.ToString("MMM").ToUpper()</b></big></div>
             <div>@show.Date.ToString("dd")</div>
         </div>
     </div>
     <br />
     <a class="btn btn-sm btn-default" asp-action="Edit" asp-route-id="@show.EventID">Edit</a>
-    <a class="btn btn-sm btn-default" asp-action="Cancel" asp-route-id="@show.EventID">Cancel</a>
+    <a class="btn btn-sm btn-default" asp-action="Cancel" asp-route-id="@show.EventID" asp-route-confirm=true onclick="return confirm('Do you really want to cancel this event?')">Cancel</a>
     <br /><br />
 }
