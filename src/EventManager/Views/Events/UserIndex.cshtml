@@ -1,5 +1,7 @@
-﻿@model IEnumerable<EventManager.Models.Event>
+﻿@using Microsoft.EntityFrameworkCore;
+@model IEnumerable<EventManager.Models.Event>
 @inject UserManager<ApplicationUser> UserManager
+
 <h2>All Upcoming Events</h2>
 <form class="form-inline">
     <div class="form-group">
@@ -13,7 +15,20 @@
 </form>
 @foreach (var show in Model)
 {
-    <h4><b>@show.Artist.Name</b></h4>
+    <h4><b>@show.Artist.Name</b>&nbsp;&nbsp;
+    @if (UserManager.Users.Include(u => u.Artists).SingleOrDefault(u => u.UserName == User.Identity.Name).Artists == null)
+    {
+        <span><a asp-action="Follow" asp-route-id="@show.Artist.Id" class="btn btn-sm btn-success">Follow</a></span>
+    }
+    else if (UserManager.Users.Include(u => u.Artists).SingleOrDefault(u => u.UserName == User.Identity.Name).Artists.Any(a => a.ArtistID == show.Artist.Id))
+    {
+      <span><a asp-action="UnFollow" asp-route-id="@show.Artist.Id" class="btn btn-sm btn-success">UnFollow</a></span>
+    }
+    else
+    {
+      <span><a asp-action="Follow" asp-route-id="@show.Artist.Id" class="btn btn-sm btn-success">Follow</a></span>
+    }
+    </h4>
     <div class="main">
         <div class="left">
             <div class="upperleft">@show.Venue</div>

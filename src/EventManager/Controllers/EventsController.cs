@@ -29,7 +29,7 @@ namespace EventManager.Controllers
         }
         public IActionResult UserIndex(string search)
         {
-            var events = db.Events.Include(e => e.Genre).Include(e => e.Artist).Include(e => e.Users).ToList();
+            var events = db.Events.Include(e => e.Genre).Include(e => e.Artist).Include(e => e.Users).Where(e => e.Date > DateTime.Today).ToList();
             if (!string.IsNullOrEmpty(search))
             {
                 ViewBag.Search = search;
@@ -118,7 +118,25 @@ namespace EventManager.Controllers
         }
         public IActionResult UserEvents()
         {
-            return View(db.Events.Include(e => e.Genre).Include(e => e.Artist).Include(e => e.Users).Where(e => e.Users.Any(u => u.User.UserName == User.Identity.Name)).ToList());
+            return View(db.Events.Include(e => e.Genre).Include(e => e.Artist).Where(e => e.Users.Any(u => u.User.UserName == User.Identity.Name)).ToList());
+        }
+        public IActionResult Follow(string id)
+        {
+            var user = _userManager.Users.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            db.Following.Add(new Following {FollowerID = user.Id, ArtistID = id});
+            db.SaveChanges();
+            return RedirectToAction("UserIndex");
+        }
+        public IActionResult UnFollow(string id)
+        {
+            var user = _userManager.Users.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            db.Remove(db.Following.SingleOrDefault(f => f.ArtistID == id && f.FollowerID == user.Id));
+            db.SaveChanges();
+            return RedirectToAction("UserIndex");
+        }
+        public IActionResult ShowFollowing()
+        {
+            return View(db.Following.Include(f => f.Artist).Where(f => f.Follower.UserName == User.Identity.Name).ToList());
         }
     }
 }

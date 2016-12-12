@@ -15,16 +15,9 @@ namespace EventManager.Controllers
         {
             db = context;
         }
-        public IActionResult Index(string search)
+        public IActionResult Index()
         {
-            var events = db.Events.Include(e => e.Genre).Include(e => e.Artist).Include(e => e.Users).Where(e => e.Date > DateTime.Now).ToList();
-            ViewBag.Attendance = db.Attendance.Include(e => e.Event).Where(e => e.User.UserName == User.Identity.Name).ToList();
-            if (!string.IsNullOrEmpty(search))
-            {
-                ViewBag.Search = search;
-                events = db.Events.Where(e => e.Artist.Name.Contains(search) || e.Venue.Contains(search) || e.Genre.Name.Contains(search)).ToList();
-            }
-            return View(events);
+            return View(db.Events.Include(e => e.Genre).Include(e => e.Artist).Where(e => e.Date > DateTime.Now).ToList());
         }
         public IActionResult About()
         {

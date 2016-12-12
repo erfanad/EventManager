@@ -32,6 +32,9 @@
     border-radius: inherit;
     background-color: white;
 }
+.follow{
+    color:#e95420;
+}
 body {
     padding-top: 50px;
     padding-bottom: 20px;

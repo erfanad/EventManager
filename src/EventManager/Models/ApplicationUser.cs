@@ -12,5 +12,7 @@ namespace EventManager.Models
     {
         public string Name { get; set; }
         public List<Attendance> Events { get; set; }
+        public List<Following> Followers { get; set; }
+        public List<Following> Artists { get; set; }
     }
 }

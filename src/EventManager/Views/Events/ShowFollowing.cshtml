@@ -1,0 +1,9 @@
+﻿@model IEnumerable<EventManager.Data.Following>
+<h2>Following:</h2>
+@foreach(var follow in Model)
+{
+ <div class="col-md-10 follow"><b>@follow.Artist.Name</b></div>
+ <br />
+ <div class="col-md-10 follow"><a asp-action="UnFollow" asp-route-id="@follow.ArtistID" class="btn btn-sm btn-success">UnFollow</a></div>
+}
+<br />

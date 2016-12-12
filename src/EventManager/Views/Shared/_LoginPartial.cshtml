@@ -27,8 +27,9 @@ else if (SignInManager.IsSignedIn(User) && string.IsNullOrEmpty(UserManager.User
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!<span class="caret"></span></a>
             <ul class="dropdown-menu">
+                <li><a asp-controller="Events" asp-action="UserIndex">Reserve Seat</a></li>
                 <li><a asp-controller="Events" asp-action="UserEvents">My Events</a></li>
-                <li><a asp-controller="Events" asp-action="UserArtist">My Artists</a></li>
+                <li><a asp-controller="Events" asp-action="ShowFollowing">My Artists</a></li>
             </ul>
         </li>
         <li>
