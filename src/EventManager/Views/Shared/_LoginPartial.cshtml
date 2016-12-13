@@ -12,6 +12,7 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!<span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a asp-controller="Events" asp-action="ArtistIndex">My Events</a></li>
+                    <li><a asp-controller="Manage" asp-action="Index">Edit Password</a></li>
                 </ul>
             </li>
             <li>
@@ -25,11 +26,12 @@ else if (SignInManager.IsSignedIn(User) && string.IsNullOrEmpty(UserManager.User
 <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
     <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!<span class="caret"></span></a>
+        <a class="dropdown-toggle" data-toggle="dropdown" asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li><a asp-controller="Events" asp-action="UserIndex">Reserve Seat</a></li>
                 <li><a asp-controller="Events" asp-action="UserEvents">My Events</a></li>
                 <li><a asp-controller="Events" asp-action="ShowFollowing">My Artists</a></li>
+                <li><a asp-controller="Manage" asp-action="Index">Edit Password</a></li>
             </ul>
         </li>
         <li>
