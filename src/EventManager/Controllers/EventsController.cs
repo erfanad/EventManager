@@ -25,17 +25,21 @@ namespace EventManager.Controllers
         public IActionResult ArtistIndex()
         {
             ViewBag.Artist = _userManager.Users.SingleOrDefault(u => u.UserName == User.Identity.Name);
-            return View(db.Events.Include(e => e.Genre).Where(e => (e.Artist.UserName == User.Identity.Name && e.IsCancelled == false)).ToList());
+            return View(db.Events.Include(e => e.Genre).Where(e => (e.Artist.UserName == User.Identity.Name && !e.IsCancelled)).ToList());
         }
         public IActionResult UserIndex(string search)
         {
-            var events = db.Events.Include(e => e.Genre).Include(e => e.Artist).Include(e => e.Users).Where(e => e.Date > DateTime.Today).ToList();
+            var events = db.Events.Include(e => e.Genre).Include(e => e.Artist).Include(e => e.Users).Where(e => e.Date > DateTime.Today && !e.IsCancelled).ToList();
             if (!string.IsNullOrEmpty(search))
             {
                 ViewBag.Search = search;
-                events = db.Events.Where(e => e.Artist.Name.Contains(search) || e.Venue.Contains(search) || e.Genre.Name.Contains(search)).ToList();
+                events = events.Where(e => e.Venue.Contains(search) || e.Artist.Name.Contains(search) || e.Genre.Name.Contains(search)).ToList();
             }
             return View(events);
+        }
+        public IActionResult UserEvents()
+        {
+            return View(db.Events.Include(e => e.Genre).Include(e => e.Artist).Where(e => e.Users.Any(u => u.User.UserName == User.Identity.Name)).ToList());
         }
         public IActionResult Create()
         {
@@ -115,10 +119,6 @@ namespace EventManager.Controllers
                 return NotFound();
             }
             return View(db.Events.Include(e => e.Artist).Include(e => e.Genre).SingleOrDefault(e => e.EventID == id));
-        }
-        public IActionResult UserEvents()
-        {
-            return View(db.Events.Include(e => e.Genre).Include(e => e.Artist).Where(e => e.Users.Any(u => u.User.UserName == User.Identity.Name)).ToList());
         }
         public IActionResult Follow(string id)
         {

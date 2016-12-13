@@ -17,7 +17,7 @@ namespace EventManager.Controllers
         }
         public IActionResult Index()
         {
-            return View(db.Events.Include(e => e.Genre).Include(e => e.Artist).Where(e => e.Date > DateTime.Now).ToList());
+            return View(db.Events.Include(e => e.Genre).Include(e => e.Artist).Where(e => e.Date > DateTime.Now && !e.IsCancelled).ToList());
         }
         public IActionResult About()
         {

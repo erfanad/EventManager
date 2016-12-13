@@ -44,7 +44,7 @@ namespace EventManager.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded && !string.IsNullOrEmpty(user.Name))
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("ArtistIndex", "Events");
                 }
                 if (result.Succeeded && string.IsNullOrEmpty(user.Name))
                 {
@@ -65,8 +65,6 @@ namespace EventManager.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
-
-
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -80,7 +78,7 @@ namespace EventManager.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("UserIndex", "Events");
                 }
             }
             return View(model);
@@ -92,8 +90,6 @@ namespace EventManager.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
-
-       
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -112,7 +108,7 @@ namespace EventManager.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("ArtistIndex", "Events");
                 }
             }
             return View(model);
