@@ -33,7 +33,7 @@ namespace EventManager.Controllers
             if (!string.IsNullOrEmpty(search))
             {
                 ViewBag.Search = search;
-                events = events.Where(e => e.Venue.Contains(search) || e.Artist.Name.Contains(search) || e.Genre.Name.Contains(search)).ToList();
+                events = events.Where(e => e.Venue.ToUpper().Contains(search.ToUpper()) || e.Artist.Name.ToUpper().Contains(search.ToUpper()) || e.Genre.Name.ToUpper().Contains(search.ToUpper())).ToList();
             }
             return View(events);
         }
